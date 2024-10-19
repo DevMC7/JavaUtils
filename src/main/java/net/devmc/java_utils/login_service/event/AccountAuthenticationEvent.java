@@ -4,4 +4,8 @@ import net.devmc.java_utils.event.Event;
 import net.devmc.java_utils.login_service.Account;
 
 public record AccountAuthenticationEvent(Account account) implements Event {
+	@Override
+	public String getName() {
+		return "AccountAuthenticationEvent for user " + account.getUsername();
+	}
 }

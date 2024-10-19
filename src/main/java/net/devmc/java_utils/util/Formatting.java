@@ -1,19 +1,9 @@
 package net.devmc.java_utils.util;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public final class Formatting {
 
 	private Formatting() {
 		// Utility class, no public constructor
-	}
-
-	public static class TIME {
-		public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-		public static final DateTimeFormatter TIME_DTF = DateTimeFormatter.ofPattern("HH:mm:ss");
-		public static final DateTimeFormatter DATE_DTF = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		public static final LocalDateTime NOW = LocalDateTime.now();
 	}
 
 	public static class COLOR {

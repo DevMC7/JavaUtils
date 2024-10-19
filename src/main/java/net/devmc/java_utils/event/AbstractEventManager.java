@@ -3,11 +3,16 @@ package net.devmc.java_utils.event;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings("unused")
 public class AbstractEventManager<T> {
 	private final Set<Listener> listeners = new HashSet<>();
+
+	public void register(Listener... listeners) {
+		this.listeners.addAll(List.of(listeners));
+	}
 
 	public void register(Listener listener) {
 		listeners.add(listener);
@@ -15,6 +20,13 @@ public class AbstractEventManager<T> {
 
 	public void unregister(Listener listener) {
 		listeners.remove(listener);
+	}
+
+	@SafeVarargs
+	public final void call(T... ts) {
+		for (T t : ts) {
+			if (t != null) this.call(t);
+		}
 	}
 
 	public void call(T t) {

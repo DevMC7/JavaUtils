@@ -1,23 +1,29 @@
 package net.devmc.java_utils.config;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import net.devmc.java_utils.config.event.ConfigLoadEvent;
+import net.devmc.java_utils.config.event.ConfigReloadEvent;
+import net.devmc.java_utils.config.event.ConfigSaveEvent;
+import net.devmc.java_utils.event.EventManager;
+
+import java.io.*;
 import java.util.Properties;
 
-public class PropertiesConfig implements Config {
+@SuppressWarnings("unused")
+public class PropertiesConfig extends Config {
 
-	private final String filePath;
+	private final File file;
 	private final Properties properties;
 
+	public EventManager eventManager;
+
+	public PropertiesConfig(File file) {
+		super(file);
+		this.file = file;
+		this.properties = new Properties();
+	}
+
 	public PropertiesConfig(String filePath) {
-		this.filePath = filePath;
-		properties = new Properties();
-		try (FileInputStream inputStream = new FileInputStream(filePath)) {
-			properties.load(inputStream);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		this(new File(filePath));
 	}
 
 	@Override
@@ -68,11 +74,25 @@ public class PropertiesConfig implements Config {
 	}
 
 	@Override
+	public void load() {
+		try (FileInputStream inputStream = new FileInputStream(file)) {
+			properties.load(inputStream);
+			if (eventManager != null) {
+				if (properties.isEmpty()) eventManager.call(new ConfigLoadEvent(this));
+				else eventManager.call(new ConfigReloadEvent(this));
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
 	public void save() {
-		try (java.io.OutputStream outputStream = new FileOutputStream(filePath)) {
-            properties.store(outputStream, null);
-        } catch (IOException e) {
-           throw new RuntimeException(e);
-        }
+		try (OutputStream outputStream = new FileOutputStream(file)) {
+			properties.store(outputStream, null);
+			if (eventManager != null) eventManager.call(new ConfigSaveEvent(this));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

@@ -1,15 +1,31 @@
 package net.devmc.java_utils.config;
 
-public interface Config {
-	String getString(String key);
-	int getInt(String key);
-	boolean getBoolean(String key);
-	double getDouble(String key);
+import java.io.*;
 
-	boolean put(String key, Object value);
+@SuppressWarnings("unused")
+public abstract class Config {
 
-	boolean remove(String key);
-	boolean remove(String key, Object value);
+	private final File file;
 
-	void save();
+	public Config(File file) {
+		this.file = file;
+		this.load();
+	}
+
+	abstract String getString(String key);
+	abstract int getInt(String key);
+	abstract boolean getBoolean(String key);
+	abstract double getDouble(String key);
+
+	abstract boolean put(String key, Object value);
+
+	abstract boolean remove(String key);
+	abstract boolean remove(String key, Object value);
+
+	abstract void load();
+	abstract void save();
+
+	public String getPath() {
+		return file.getAbsolutePath();
+	}
 }

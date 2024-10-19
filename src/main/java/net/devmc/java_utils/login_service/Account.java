@@ -11,7 +11,7 @@ public class Account implements Serializable {
 
 	private final String username;
 	private final UUID uuid;
-	private final String password;
+	protected final String password;
 
 	private boolean authenticated = false;
 
@@ -68,7 +68,7 @@ public class Account implements Serializable {
 		this.password = password;
 	}
 
-	AuthenticationResult authenticate(final String username, final UUID uuid, final String password) {
+	protected AuthenticationResult authenticate(final String username, final UUID uuid, final String password) {
 		if (this.authenticated) {
 			return AuthenticationResult.ALREADY_LOGGED_IN;
 		}
