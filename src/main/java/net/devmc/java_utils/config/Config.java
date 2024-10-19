@@ -1,14 +1,13 @@
 package net.devmc.java_utils.config;
 
 import java.io.*;
+import java.nio.file.Path;
 
 @SuppressWarnings("unused")
-public abstract class Config {
+public abstract class Config extends File {
 
-	private final File file;
-
-	public Config(File file) {
-		this.file = file;
+	public Config(String path) {
+		super(Path.of(path).toAbsolutePath().toUri());
 		this.load();
 	}
 
@@ -24,8 +23,4 @@ public abstract class Config {
 
 	abstract void load();
 	abstract void save();
-
-	public String getPath() {
-		return file.getAbsolutePath();
-	}
 }

@@ -11,19 +11,17 @@ import java.util.Properties;
 @SuppressWarnings("unused")
 public class PropertiesConfig extends Config {
 
-	private final File file;
 	private final Properties properties;
 
 	public EventManager eventManager;
 
-	public PropertiesConfig(File file) {
-		super(file);
-		this.file = file;
+	public PropertiesConfig(String path) {
+		super(path);
 		this.properties = new Properties();
 	}
 
-	public PropertiesConfig(String filePath) {
-		this(new File(filePath));
+	public PropertiesConfig(File file) {
+		this(file.getAbsolutePath());
 	}
 
 	@Override
@@ -75,7 +73,7 @@ public class PropertiesConfig extends Config {
 
 	@Override
 	public void load() {
-		try (FileInputStream inputStream = new FileInputStream(file)) {
+		try (FileInputStream inputStream = new FileInputStream(this)) {
 			properties.load(inputStream);
 			if (eventManager != null) {
 				if (properties.isEmpty()) eventManager.call(new ConfigLoadEvent(this));
@@ -88,7 +86,7 @@ public class PropertiesConfig extends Config {
 
 	@Override
 	public void save() {
-		try (OutputStream outputStream = new FileOutputStream(file)) {
+		try (OutputStream outputStream = new FileOutputStream(this)) {
 			properties.store(outputStream, null);
 			if (eventManager != null) eventManager.call(new ConfigSaveEvent(this));
 		} catch (IOException e) {

@@ -18,8 +18,12 @@ public class YamlConfig extends Config {
 	private final Map<String, Object> data = new HashMap<>();
 	public EventManager eventManager;
 
+	public YamlConfig(String path) {
+		super(path);
+	}
+
 	public YamlConfig(File file) {
-		super(file);
+		super(file.getAbsolutePath());
 	}
 
 	@Override
@@ -65,7 +69,7 @@ public class YamlConfig extends Config {
 			eventManager.call(new ConfigReloadEvent(this));
 			data.clear();
 		}
-		try (BufferedReader reader = new BufferedReader(new FileReader(getPath()))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(this))) {
 			String line;
 			String currentKey = null;
 			Map<String, Object> currentMap = data;
