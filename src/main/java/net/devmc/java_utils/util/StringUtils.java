@@ -37,9 +37,4 @@ public class StringUtils {
 				.replaceAll(", ", "");
 	}
 
-	public static void main(String[] args) {
-		String[] string = {"i", "am", "a", "sentence"};
-		String s = concentrate(string);
-		System.out.println(s);
-	}
 }
